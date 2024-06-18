@@ -1,0 +1,104 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: onguard
+labels:
+  template: onguard
+objects:
+  - kind: ServiceAccount
+    apiVersion: v1
+    metadata:
+      name: '${SERVICE_ACCOUNT_NAME}'
+  - apiVersion: batch/v1
+    kind: CronJob
+    metadata:
+      name: '${APP_NAME}'
+    spec:
+      concurrencyPolicy: Forbid
+      schedule: "${CRONTAB_EXPRESSION}"
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              restartPolicy: Never
+              serviceAccountName: '${SERVICE_ACCOUNT_NAME}'
+              containers:
+              - name: '${APP_NAME}'
+                image: '${IMAGE}:${IMAGE_TAG}'
+                imagePullPolicy: IfNotPresent
+                command:
+                - ./application
+                - gcs
+                env:
+                  - name: DB_REDIS_HOST
+                    valueFrom:
+                      secretKeyRef:
+                        name: '${ELASTICACHE_SECRET}'
+                        key: db.host
+                  - name: DB_REDIS_PORT
+                    valueFrom:
+                      secretKeyRef:
+                        name: '${ELASTICACHE_SECRET}'
+                        key: db.port
+              resources:
+                limits:
+                  cpu: ${CPU_LIMIT}
+                  memory: ${MEMORY_LIMIT}
+                requests:
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
+parameters:
+  - name: APP_NAME
+    displayName: Application name
+    description: Application name
+    value: onguard
+    required: true
+  - name: IMAGE
+    displayName: Container image name
+    description: Container image name
+    value: quay.io/ecosystem-appeng/osv-ingester
+    required: true
+  - name: IMAGE_TAG
+    displayName: Container image tag
+    description: Container image tag
+    value: latest
+    required: true
+  - name: SERVICE_ACCOUNT_NAME
+    displayName: ServiceAccount name
+    description: The name of the ServiceAccount to use to run this pod.
+    value: onguard-sa
+  - name: ELASTICACHE_SECRET
+    displayName: Elasticache Secret
+    description: Name of the secret containing the Elasticache settings
+    value: onguard-elasticache
+    required: true
+  - name: SERVICE_NAME
+    displayName: Service name
+    description: Service name
+    value: onguard
+    required: true
+  - name: CRONTAB_EXPRESSION
+    displayName: Crontab expression
+    description: Crontab expression
+    value: "30 00,12 * * *"
+    required: true
+  - name: CPU_REQUEST
+    description: The minimum amount of CPU required by a container
+    displayName: Memory Limit
+    required: true
+    value: 5m
+  - name: CPU_LIMIT
+    description: The maximum amount of CPU the container can use.
+    displayName: Memory Limit
+    required: true
+    value: 10m
+  - name: MEMORY_REQUEST
+    description: The minimum amount of memory required by a container
+    displayName: Memory Limit
+    required: true
+    value: 10Mi
+  - name: MEMORY_LIMIT
+    description: The maximum amount of memory the container can use.
+    displayName: Memory Limit
+    required: true
+    value: 100Mi

@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: osv-ingester
+spec:
+  concurrencyPolicy: Forbid
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: osv-ingester
+            image: quay.io/ruben/osv-ingester:latest
+            imagePullPolicy: IfNotPresent
+            command:
+            - ./application
+            - gcs
+            env:
+              - name: DB_REDIS_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: exhort-onguard-secret
+                    key: db.host
+              - name: DB_REDIS_PORT
+                valueFrom:
+                  secretKeyRef:
+                    name: exhort-onguard-secret
+                    key: db.port
+            resources:
+              limits:
+                cpu: 10m
+                memory: 100Mi
+              requests:
+                cpu: 1m
+                memory: 50Mi
