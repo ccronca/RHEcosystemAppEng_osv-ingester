@@ -12,7 +12,7 @@ spec:
           restartPolicy: Never
           containers:
           - name: osv-ingester
-            image: quay.io/ruben/osv-ingester:latest
+            image: osv-ingester:latest
             imagePullPolicy: IfNotPresent
             command:
             - ./application
