@@ -16,8 +16,12 @@ objects:
     spec:
       concurrencyPolicy: Forbid
       schedule: "${CRONTAB_EXPRESSION}"
+      failedJobsHistoryLimit: 1
+      successfulJobsHistoryLimit: 1
       jobTemplate:
         spec:
+          ttlSecondsAfterFinished: 30
+          backoffLimit: 3
           template:
             spec:
               restartPolicy: Never
@@ -86,19 +90,19 @@ parameters:
     description: The minimum amount of CPU required by a container
     displayName: Memory Limit
     required: true
-    value: 5m
+    value: 100m
   - name: CPU_LIMIT
     description: The maximum amount of CPU the container can use.
     displayName: Memory Limit
     required: true
-    value: 10m
+    value: 300m
   - name: MEMORY_REQUEST
     description: The minimum amount of memory required by a container
     displayName: Memory Limit
     required: true
-    value: 10Mi
+    value: 500Mi
   - name: MEMORY_LIMIT
     description: The maximum amount of memory the container can use.
     displayName: Memory Limit
     required: true
-    value: 100Mi
+    value: 1000Mi
