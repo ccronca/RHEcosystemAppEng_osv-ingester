@@ -1,9 +1,9 @@
 kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
-  name: onguard
+  name: osv-ingester
 labels:
-  template: onguard
+  template: osv-ingester
 objects:
   - kind: ServiceAccount
     apiVersion: v1
@@ -55,7 +55,7 @@ parameters:
   - name: APP_NAME
     displayName: Application name
     description: Application name
-    value: onguard
+    value: osv-ingester
     required: true
   - name: IMAGE
     displayName: Container image name
@@ -70,16 +70,11 @@ parameters:
   - name: SERVICE_ACCOUNT_NAME
     displayName: ServiceAccount name
     description: The name of the ServiceAccount to use to run this pod.
-    value: onguard-sa
+    value: osv-ingester-sa
   - name: ELASTICACHE_SECRET
     displayName: Elasticache Secret
     description: Name of the secret containing the Elasticache settings
     value: onguard-elasticache
-    required: true
-  - name: SERVICE_NAME
-    displayName: Service name
-    description: Service name
-    value: onguard
     required: true
   - name: CRONTAB_EXPRESSION
     displayName: Crontab expression
