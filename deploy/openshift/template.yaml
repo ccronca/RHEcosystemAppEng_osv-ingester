@@ -1,9 +1,9 @@
 kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
-  name: onguard
+  name: osv-ingester
 labels:
-  template: onguard
+  template: osv-ingester
 objects:
   - kind: ServiceAccount
     apiVersion: v1
@@ -16,8 +16,12 @@ objects:
     spec:
       concurrencyPolicy: Forbid
       schedule: "${CRONTAB_EXPRESSION}"
+      failedJobsHistoryLimit: 1
+      successfulJobsHistoryLimit: 1
       jobTemplate:
         spec:
+          ttlSecondsAfterFinished: 30
+          backoffLimit: 3
           template:
             spec:
               restartPolicy: Never
@@ -51,7 +55,7 @@ parameters:
   - name: APP_NAME
     displayName: Application name
     description: Application name
-    value: onguard
+    value: osv-ingester
     required: true
   - name: IMAGE
     displayName: Container image name
@@ -66,16 +70,11 @@ parameters:
   - name: SERVICE_ACCOUNT_NAME
     displayName: ServiceAccount name
     description: The name of the ServiceAccount to use to run this pod.
-    value: onguard-sa
+    value: osv-ingester-sa
   - name: ELASTICACHE_SECRET
     displayName: Elasticache Secret
     description: Name of the secret containing the Elasticache settings
     value: onguard-elasticache
-    required: true
-  - name: SERVICE_NAME
-    displayName: Service name
-    description: Service name
-    value: onguard
     required: true
   - name: CRONTAB_EXPRESSION
     displayName: Crontab expression
@@ -86,19 +85,19 @@ parameters:
     description: The minimum amount of CPU required by a container
     displayName: Memory Limit
     required: true
-    value: 5m
+    value: 100m
   - name: CPU_LIMIT
     description: The maximum amount of CPU the container can use.
     displayName: Memory Limit
     required: true
-    value: 10m
+    value: 300m
   - name: MEMORY_REQUEST
     description: The minimum amount of memory required by a container
     displayName: Memory Limit
     required: true
-    value: 10Mi
+    value: 500Mi
   - name: MEMORY_LIMIT
     description: The maximum amount of memory the container can use.
     displayName: Memory Limit
     required: true
-    value: 100Mi
+    value: 1000Mi
