@@ -1,12 +1,9 @@
 <?xml version="1.0"?>
-<project
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.redhat.ecosystemappeng.exhort</groupId>
   <artifactId>osv-ingester</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>OSV Ingester</name>
   <description>Red Hat Trusted Profile Analyser :: Exhort :: OSV Ingester</description>
 
@@ -52,7 +49,7 @@
     <url>https://github.com/RHEcosystemAppEng/osv-ingester</url>
     <connection>scm:git:git@github.com:RHEcosystemAppEng/osv-ingester.git</connection>
     <developerConnection>scm:git:git@github.com:RHEcosystemAppEng/osv-ingester.git</developerConnection>
-    <tag></tag>
+    <tag>v1.0.0</tag>
   </scm>
 
   <dependencyManagement>
