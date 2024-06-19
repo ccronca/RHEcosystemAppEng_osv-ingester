@@ -4,9 +4,13 @@ metadata:
   name: osv-ingester
 spec:
   concurrencyPolicy: Forbid
-  schedule: "*/5 * * * *"
+  schedule: "*/15 * * * *"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      ttlSecondsAfterFinished: 30
+      backoffLimit: 3
       template:
         spec:
           restartPolicy: Never
@@ -30,8 +34,8 @@ spec:
                     key: db.port
             resources:
               limits:
-                cpu: 10m
-                memory: 100Mi
+                cpu: 300m
+                memory: 1000Mi
               requests:
-                cpu: 1m
-                memory: 50Mi
+                cpu: 100m
+                memory: 500Mi
