@@ -38,7 +38,7 @@ objects:
                     valueFrom:
                       secretKeyRef:
                         name: '${ELASTICACHE_SECRET}'
-                        key: db.host
+                        key: db.endpoint
                   - name: DB_REDIS_PORT
                     valueFrom:
                       secretKeyRef:
